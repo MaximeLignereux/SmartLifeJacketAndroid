@@ -5,11 +5,11 @@ import android.animation.AnimatorListenerAdapter;
 import android.annotation.TargetApi;
 import android.app.LoaderManager.LoaderCallbacks;
 import android.content.CursorLoader;
+import android.content.Intent;
 import android.content.Loader;
 import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.mlignereux.univcorse.fr.smartlifejacketandroid.R;
-import android.mlignereux.univcorse.fr.smartlifejacketandroid.controller.CAuthController;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Build;
@@ -39,7 +39,7 @@ import static android.Manifest.permission.READ_CONTACTS;
  */
 public class CAuthActivity extends AppCompatActivity implements LoaderCallbacks<Cursor> {
 
-    CAuthController mAuthController;
+    Intent mIntent;
 
     /**
      * Id to identity READ_CONTACTS permission request.
@@ -92,10 +92,18 @@ public class CAuthActivity extends AppCompatActivity implements LoaderCallbacks<
             }
         });
 
+        TextView mNewUserView = (TextView) findViewById(R.id.register_textview);
+        mNewUserView.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mIntent = new Intent(CAuthActivity.this, CRegisterActivity.class);
+                mIntent.putExtra("email", mEmailView.toString());
+                startActivity(mIntent);
+            }
+        });
+
         mLoginFormView = findViewById(R.id.login_form);
         mProgressView = findViewById(R.id.login_progress);
-
-        mAuthController = new CAuthController(this);
     }
 
     private void populateAutoComplete() {
@@ -329,7 +337,6 @@ public class CAuthActivity extends AppCompatActivity implements LoaderCallbacks<
 
             // TODO: register the new account here.
 
-
             return true;
         }
 
@@ -340,7 +347,8 @@ public class CAuthActivity extends AppCompatActivity implements LoaderCallbacks<
 
             if (success) {
                 finish();
-                mAuthController.goToHomeActivity();
+                mIntent = new Intent(CAuthActivity.this, CHomeActivity.class);
+                startActivity(mIntent);
             } else {
                 mPasswordView.setError(getString(R.string.error_incorrect_password));
                 mPasswordView.requestFocus();
