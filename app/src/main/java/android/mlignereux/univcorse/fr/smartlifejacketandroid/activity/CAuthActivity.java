@@ -3,23 +3,21 @@ package android.mlignereux.univcorse.fr.smartlifejacketandroid.activity;
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.annotation.TargetApi;
-import android.content.pm.PackageManager;
-import android.mlignereux.univcorse.fr.smartlifejacketandroid.R;
-import android.mlignereux.univcorse.fr.smartlifejacketandroid.controller.CAuthController;
-import android.support.annotation.NonNull;
-import android.support.design.widget.Snackbar;
-import android.support.v7.app.AppCompatActivity;
 import android.app.LoaderManager.LoaderCallbacks;
-
 import android.content.CursorLoader;
 import android.content.Loader;
+import android.content.pm.PackageManager;
 import android.database.Cursor;
+import android.mlignereux.univcorse.fr.smartlifejacketandroid.R;
+import android.mlignereux.univcorse.fr.smartlifejacketandroid.controller.CAuthController;
 import android.net.Uri;
 import android.os.AsyncTask;
-
 import android.os.Build;
 import android.os.Bundle;
 import android.provider.ContactsContract;
+import android.support.annotation.NonNull;
+import android.support.design.widget.Snackbar;
+import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
 import android.view.KeyEvent;
 import android.view.View;
@@ -198,7 +196,7 @@ public class CAuthActivity extends AppCompatActivity implements LoaderCallbacks<
 
     private boolean isEmailValid(String email) {
         //TODO: Replace this with your own logic
-        return email.contains("@");
+        return email.contains("@") && !email.contains(" ");
     }
 
     private boolean isPasswordValid(String password) {
@@ -330,6 +328,8 @@ public class CAuthActivity extends AppCompatActivity implements LoaderCallbacks<
             }
 
             // TODO: register the new account here.
+
+
             return true;
         }
 
@@ -339,12 +339,14 @@ public class CAuthActivity extends AppCompatActivity implements LoaderCallbacks<
             showProgress(false);
 
             if (success) {
-                mAuthController.goToHomeActivity();
                 finish();
+                mAuthController.goToHomeActivity();
             } else {
                 mPasswordView.setError(getString(R.string.error_incorrect_password));
                 mPasswordView.requestFocus();
             }
+
+
         }
 
         @Override

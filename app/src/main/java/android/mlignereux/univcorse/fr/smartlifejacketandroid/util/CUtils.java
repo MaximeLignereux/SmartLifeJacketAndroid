@@ -1,4 +1,4 @@
-package android.mlignereux.univcorse.fr.smartlifejacketandroid.CUtil;
+package android.mlignereux.univcorse.fr.smartlifejacketandroid.util;
 
 import android.app.Activity;
 import android.content.SharedPreferences;
