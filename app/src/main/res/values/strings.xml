@@ -19,9 +19,21 @@
     <string name="error_invalid_email">Adresse mail invalide</string>
     <string name="error_invalid_password">Mot de passe trop court</string>
     <string name="error_incorrect_password">Mot de passe incorrecte</string>
+    <string name="error_incorrect_repassword">Mot de passe différent</string>
     <string name="error_field_required">Champ requis</string>
     <string name="error_incorrect_email">Email déjà utilisé</string>
     <string name="permission_rationale">"Contacts permissions are needed for providing email
         completions."
     </string>
+
+    <string-array name="drawer_titles">
+        <item>Accueil</item>
+        <item>Entrainement</item>
+        <item>Historique</item>
+        <item>Statistiques</item>
+        <item>Paramètres</item>
+    </string-array>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>

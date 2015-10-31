@@ -5,6 +5,7 @@ import android.animation.AnimatorListenerAdapter;
 import android.annotation.TargetApi;
 import android.content.Intent;
 import android.mlignereux.univcorse.fr.smartlifejacketandroid.R;
+import android.mlignereux.univcorse.fr.smartlifejacketandroid.entity.CUser;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
@@ -13,6 +14,8 @@ import android.text.TextUtils;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.RadioButton;
+import android.widget.RadioGroup;
 
 public class CRegisterActivity extends AppCompatActivity {
 
@@ -23,6 +26,8 @@ public class CRegisterActivity extends AppCompatActivity {
     private EditText mRepasswordView;
     private View mProgressView;
     private View mLoginFormView;
+
+    private CUser.Status mStatus = null;
 
     private UserRegisterTask mAuthTask;
 
@@ -45,6 +50,8 @@ public class CRegisterActivity extends AppCompatActivity {
 
         mLoginFormView = findViewById(R.id.register_form);
         mProgressView = findViewById(R.id.login_progress_register);
+
+        RadioGroup mStatusRadioGroup = (RadioGroup)findViewById(R.id.status_radiogroup);
     }
 
     /**
@@ -77,10 +84,8 @@ public class CRegisterActivity extends AppCompatActivity {
             cancel = true;
         }
 
-        if (!TextUtils.isEmpty(repassword)
-                && !isPasswordValid(repassword)
-                && !repassword.equals(password)) {
-            mRepasswordView.setError(getString(R.string.error_invalid_password));
+        if (!repassword.equals(password)) {
+            mRepasswordView.setError(getString(R.string.error_incorrect_repassword));
             focusView = mRepasswordView;
             cancel = true;
         }
@@ -104,7 +109,7 @@ public class CRegisterActivity extends AppCompatActivity {
             // Show a progress spinner, and kick off a background task to
             // perform the user login attempt.
             showProgress(true);
-            mAuthTask = new UserRegisterTask(email, password);
+            mAuthTask = new UserRegisterTask(email, repassword);
             mAuthTask.execute((Void) null);
         }
     }
@@ -119,6 +124,22 @@ public class CRegisterActivity extends AppCompatActivity {
         return password.length() > 4;
     }
 
+    public void onRadioButtonClicked(View view) {
+        // Is the button now checked?
+        boolean checked = ((RadioButton) view).isChecked();
+
+        // Check which radio button was clicked
+        switch(view.getId()) {
+            case R.id.athlete_radiobutton:
+                if (checked)
+                    mStatus = CUser.Status.ATHLETE;
+                    break;
+            case R.id.coach_radiobutton:
+                if (checked)
+                    mStatus = CUser.Status.COACH;
+                    break;
+        }
+    }
     /**
      * Shows the progress UI and hides the login form.
      */
@@ -193,8 +214,10 @@ public class CRegisterActivity extends AppCompatActivity {
             if (success) {
                 finish();
                 mIntent = new Intent(CRegisterActivity.this, CHomeActivity.class);
+                mIntent.putExtra("user", new CUser(mEmail,mPassword,mStatus));
                 startActivity(mIntent);
             } else {
+                /*TODO email déjà existant après appel réseau */
                 mEmailView.setError(getString(R.string.error_incorrect_email));
                 mEmailView.requestFocus();
             }

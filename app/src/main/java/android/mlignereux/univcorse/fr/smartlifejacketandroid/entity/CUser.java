@@ -1,9 +1,11 @@
 package android.mlignereux.univcorse.fr.smartlifejacketandroid.entity;
 
+import java.io.Serializable;
+
 /**
  * Created by asus on 30/10/2015.
  */
-public class CUser {
+public class CUser implements Serializable {
 
     private String pseudo;
 

@@ -97,7 +97,6 @@ public class CAuthActivity extends AppCompatActivity implements LoaderCallbacks<
             @Override
             public void onClick(View v) {
                 mIntent = new Intent(CAuthActivity.this, CRegisterActivity.class);
-                mIntent.putExtra("email", mEmailView.toString());
                 startActivity(mIntent);
             }
         });
