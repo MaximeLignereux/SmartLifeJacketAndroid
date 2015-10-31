@@ -1,0 +1,27 @@
+<resources>
+    <string name="app_name">SmartLifeJacketAndroid</string>
+
+    <string name="navigation_drawer_open">Open navigation drawer</string>
+    <string name="navigation_drawer_close">Close navigation drawer</string>
+
+    <string name="action_settings">Settings</string>
+    <string name="title_activity_cauth">Auth</string>
+
+    <!-- Strings related to login -->
+    <string name="prompt_email">Email</string>
+    <string name="prompt_password">Mot de passe</string>
+    <string name="prompt_password_register">Mot de passe</string>
+    <string name="prompt_repassword_register">Retappez mot de passe</string>
+    <string name="action_sign_in">Connexion</string>
+    <string name="action_register_text">Nouvel utilisateur ?</string>
+    <string name="action_register">Inscription</string>
+    <string name="action_sign_in_short">Connexion</string>
+    <string name="error_invalid_email">Adresse mail invalide</string>
+    <string name="error_invalid_password">Mot de passe trop court</string>
+    <string name="error_incorrect_password">Mot de passe incorrecte</string>
+    <string name="error_field_required">Champ requis</string>
+    <string name="error_incorrect_email">Email déjà utilisé</string>
+    <string name="permission_rationale">"Contacts permissions are needed for providing email
+        completions."
+    </string>
+</resources>
