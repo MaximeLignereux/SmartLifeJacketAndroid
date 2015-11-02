@@ -1,6 +1,7 @@
-package android.mlignereux.univcorse.fr.smartlifejacketandroid;
+package android.mlignereux.univcorse.fr.smartlifejacketandroid.fragment;
 
 import android.app.Activity;
+import android.mlignereux.univcorse.fr.smartlifejacketandroid.R;
 import android.net.Uri;
 import android.os.Bundle;
 import android.app.Fragment;

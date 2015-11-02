@@ -1,6 +1,5 @@
 package android.mlignereux.univcorse.fr.smartlifejacketandroid.activity;
 
-import android.mlignereux.univcorse.fr.smartlifejacketandroid.NewTrainingFragment;
 import android.mlignereux.univcorse.fr.smartlifejacketandroid.R;
 import android.mlignereux.univcorse.fr.smartlifejacketandroid.entity.CUser;
 import android.os.Bundle;
@@ -31,9 +30,9 @@ public class CHomeActivity extends AppCompatActivity
                 fab.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
-                        getFragmentManager().beginTransaction()
+                       /* getFragmentManager().beginTransaction()
                                 .replace(R.id.container, new NewTrainingFragment())
-                                .commit();
+                                .commit();*/
             }
         });
 
@@ -43,8 +42,8 @@ public class CHomeActivity extends AppCompatActivity
         drawer.setDrawerListener(toggle);
         toggle.syncState();
 
-        NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
-        navigationView.setNavigationItemSelectedListener(this);
+        /*NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
+        navigationView.setNavigationItemSelectedListener(this);*/
     }
 
     @Override
@@ -91,13 +90,10 @@ public class CHomeActivity extends AppCompatActivity
 
         } else if (id == R.id.nav_slideshow) {
 
-        } else if (id == R.id.nav_manage) {
-
         } else if (id == R.id.nav_share) {
 
-        } else if (id == R.id.nav_send) {
-
         }
+
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);

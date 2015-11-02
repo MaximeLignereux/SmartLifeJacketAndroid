@@ -21,8 +21,8 @@ public class CUser implements Serializable {
         this.pseudo= pPseudo;
         this.pwd = pPwd;
         this.status = pStatus;
-        if(pStatus.equals(Status.ATHLETE)) new CAthlete(pPseudo,pPwd);
-        else if (pStatus.equals(Status.COACH)) new CCoach(pPseudo,pPwd);
+        /*if(pStatus.equals(Status.ATHLETE)) new CAthlete(pPseudo,pPwd);
+        else if (pStatus.equals(Status.COACH)) new CCoach(pPseudo,pPwd);*/
     }
 
     public String getPseudo() {

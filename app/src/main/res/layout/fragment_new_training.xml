@@ -2,7 +2,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="android.mlignereux.univcorse.fr.smartlifejacketandroid.NewTrainingFragment">
+    tools:context=".fragment.NewTrainingFragment">
 
     <!-- TODO: Update blank fragment layout -->
     <TextView
