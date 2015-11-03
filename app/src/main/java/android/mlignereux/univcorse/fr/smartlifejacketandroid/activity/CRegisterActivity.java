@@ -5,7 +5,7 @@ import android.animation.AnimatorListenerAdapter;
 import android.annotation.TargetApi;
 import android.content.Intent;
 import android.mlignereux.univcorse.fr.smartlifejacketandroid.R;
-import android.mlignereux.univcorse.fr.smartlifejacketandroid.entity.CUser;
+import android.mlignereux.univcorse.fr.smartlifejacketandroid.model.CUser;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;

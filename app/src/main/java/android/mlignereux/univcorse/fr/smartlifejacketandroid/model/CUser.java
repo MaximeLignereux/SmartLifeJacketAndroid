@@ -1,4 +1,4 @@
-package android.mlignereux.univcorse.fr.smartlifejacketandroid.entity;
+package android.mlignereux.univcorse.fr.smartlifejacketandroid.model;
 
 import java.io.Serializable;
 

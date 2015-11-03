@@ -25,8 +25,9 @@
         <activity
             android:name=".activity.CHomeActivity"
             android:label="@string/app_name"
-            android:theme="@style/AppTheme.NoActionBar"></activity>
-        <activity android:name=".activity.CRegisterActivity"></activity>
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity android:name=".activity.CRegisterActivity" />
+        <activity android:name=".activity.CNewTrainingActivity"></activity>
     </application>
 
 </manifest>

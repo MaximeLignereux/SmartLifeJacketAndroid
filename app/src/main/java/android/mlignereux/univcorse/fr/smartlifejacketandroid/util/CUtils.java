@@ -2,7 +2,7 @@ package android.mlignereux.univcorse.fr.smartlifejacketandroid.util;
 
 import android.app.Activity;
 import android.content.SharedPreferences;
-import android.mlignereux.univcorse.fr.smartlifejacketandroid.entity.CUser;
+import android.mlignereux.univcorse.fr.smartlifejacketandroid.model.CUser;
 import android.preference.PreferenceManager;
 
 import com.google.gson.Gson;

@@ -1,4 +1,4 @@
-package android.mlignereux.univcorse.fr.smartlifejacketandroid.entity;
+package android.mlignereux.univcorse.fr.smartlifejacketandroid.model;
 
 /**
  * Created by asus on 30/10/2015.
