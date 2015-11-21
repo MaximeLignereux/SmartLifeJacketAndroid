@@ -10,6 +10,10 @@ import android.content.Loader;
 import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.mlignereux.univcorse.fr.smartlifejacketandroid.R;
+import android.mlignereux.univcorse.fr.smartlifejacketandroid.dao.CAthleteDAO;
+import android.mlignereux.univcorse.fr.smartlifejacketandroid.dao.CCoachDAO;
+import android.mlignereux.univcorse.fr.smartlifejacketandroid.entity.CAthlete;
+import android.mlignereux.univcorse.fr.smartlifejacketandroid.entity.CUser;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Build;
@@ -27,7 +31,10 @@ import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.RadioGroup;
 import android.widget.TextView;
+
+import org.springframework.http.HttpStatus;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -63,6 +70,7 @@ public class CAuthActivity extends AppCompatActivity implements LoaderCallbacks<
     private EditText mPasswordView;
     private View mProgressView;
     private View mLoginFormView;
+    private RadioGroup mStatusRadioGroup;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -103,6 +111,8 @@ public class CAuthActivity extends AppCompatActivity implements LoaderCallbacks<
 
         mLoginFormView = findViewById(R.id.login_form);
         mProgressView = findViewById(R.id.login_progress);
+
+        mStatusRadioGroup = (RadioGroup)findViewById(R.id.status_radiogroup_auth);
     }
 
     private void populateAutoComplete() {
@@ -196,7 +206,8 @@ public class CAuthActivity extends AppCompatActivity implements LoaderCallbacks<
             // Show a progress spinner, and kick off a background task to
             // perform the user login attempt.
             showProgress(true);
-            mAuthTask = new UserLoginTask(email, password);
+            mAuthTask = new UserLoginTask(email, password,
+                    getStatus(mStatusRadioGroup.getCheckedRadioButtonId()));
             mAuthTask.execute((Void) null);
         }
     }
@@ -305,46 +316,36 @@ public class CAuthActivity extends AppCompatActivity implements LoaderCallbacks<
      * Represents an asynchronous login/registration task used to authenticate
      * the user.
      */
-    public class UserLoginTask extends AsyncTask<Void, Void, Boolean> {
+    public class UserLoginTask extends AsyncTask<Void, Void, HttpStatus> {
 
         private final String mEmail;
         private final String mPassword;
+        private final CUser.Status mStatus;
 
-        UserLoginTask(String email, String password) {
+        UserLoginTask(String email, String password, CUser.Status status) {
             mEmail = email;
             mPassword = password;
+            mStatus = status;
         }
 
         @Override
-        protected Boolean doInBackground(Void... params) {
-            // TODO: attempt authentication against a network service.
+        protected HttpStatus doInBackground(Void... params) {
 
-            try {
-                // Simulate network access.
-                Thread.sleep(2000);
-            } catch (InterruptedException e) {
-                return false;
-            }
+            HttpStatus status;
+            CAthleteDAO athleteDAO = new CAthleteDAO();
+            CCoachDAO coachDAO = new CCoachDAO();
 
-            for (String credential : DUMMY_CREDENTIALS) {
-                String[] pieces = credential.split(":");
-                if (pieces[0].equals(mEmail)) {
-                    // Account exists, return true if the password matches.
-                    return pieces[1].equals(mPassword);
-                }
-            }
+            status = athleteDAO.getAthlete(new CAthlete(mEmail,mPassword,mStatus));
 
-            // TODO: register the new account here.
-
-            return true;
+            return status;
         }
 
         @Override
-        protected void onPostExecute(final Boolean success) {
+        protected void onPostExecute(final HttpStatus success) {
             mAuthTask = null;
             showProgress(false);
 
-            if (success) {
+            if (success.value() == 200) {
                 finish();
                 mIntent = new Intent(CAuthActivity.this, CHomeActivity.class);
                 startActivity(mIntent);
@@ -361,6 +362,15 @@ public class CAuthActivity extends AppCompatActivity implements LoaderCallbacks<
             mAuthTask = null;
             showProgress(false);
         }
+    }
+
+    public CUser.Status getStatus(int pId){
+        CUser.Status status = null;
+
+        if(pId == R.id.athlete_radiobutton_auth) status = CUser.Status.ATHLETE;
+        else if (pId == R.id.coach_radiobutton_auth) status = CUser.Status.COACH;
+
+        return status;
     }
 }
 

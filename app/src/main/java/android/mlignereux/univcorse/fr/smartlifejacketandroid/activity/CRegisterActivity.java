@@ -5,17 +5,24 @@ import android.animation.AnimatorListenerAdapter;
 import android.annotation.TargetApi;
 import android.content.Intent;
 import android.mlignereux.univcorse.fr.smartlifejacketandroid.R;
-import android.mlignereux.univcorse.fr.smartlifejacketandroid.model.CUser;
+import android.mlignereux.univcorse.fr.smartlifejacketandroid.dao.CAthleteDAO;
+import android.mlignereux.univcorse.fr.smartlifejacketandroid.dao.CCoachDAO;
+import android.mlignereux.univcorse.fr.smartlifejacketandroid.entity.CAthlete;
+import android.mlignereux.univcorse.fr.smartlifejacketandroid.entity.CUser;
+import android.mlignereux.univcorse.fr.smartlifejacketandroid.util.CUtils;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.RadioButton;
 import android.widget.RadioGroup;
+import android.widget.Toast;
+
+import org.springframework.http.HttpStatus;
 
 public class CRegisterActivity extends AppCompatActivity {
 
@@ -27,7 +34,7 @@ public class CRegisterActivity extends AppCompatActivity {
     private View mProgressView;
     private View mLoginFormView;
 
-    private CUser.Status mStatus = null;
+    private RadioGroup mStatusRadioGroup;
 
     private UserRegisterTask mAuthTask;
 
@@ -51,7 +58,8 @@ public class CRegisterActivity extends AppCompatActivity {
         mLoginFormView = findViewById(R.id.register_form);
         mProgressView = findViewById(R.id.login_progress_register);
 
-        RadioGroup mStatusRadioGroup = (RadioGroup)findViewById(R.id.status_radiogroup);
+        mStatusRadioGroup = (RadioGroup)findViewById(R.id.status_radiogroup);
+
     }
 
     /**
@@ -109,7 +117,11 @@ public class CRegisterActivity extends AppCompatActivity {
             // Show a progress spinner, and kick off a background task to
             // perform the user login attempt.
             showProgress(true);
-            mAuthTask = new UserRegisterTask(email, repassword);
+
+            mAuthTask = new UserRegisterTask(
+                    email,
+                    repassword,
+                    getStatus(mStatusRadioGroup.getCheckedRadioButtonId()));
             mAuthTask.execute((Void) null);
         }
     }
@@ -124,22 +136,6 @@ public class CRegisterActivity extends AppCompatActivity {
         return password.length() > 4;
     }
 
-    public void onRadioButtonClicked(View view) {
-        // Is the button now checked?
-        boolean checked = ((RadioButton) view).isChecked();
-
-        // Check which radio button was clicked
-        switch(view.getId()) {
-            case R.id.athlete_radiobutton:
-                if (checked)
-                    mStatus = CUser.Status.ATHLETE;
-                    break;
-            case R.id.coach_radiobutton:
-                if (checked)
-                    mStatus = CUser.Status.COACH;
-                    break;
-        }
-    }
     /**
      * Shows the progress UI and hides the login form.
      */
@@ -181,48 +177,52 @@ public class CRegisterActivity extends AppCompatActivity {
      * Represents an asynchronous login/registration task used to authenticate
      * the user.
      */
-    public class UserRegisterTask extends AsyncTask<Void, Void, Boolean> {
+    public class UserRegisterTask extends AsyncTask<Void, Void, HttpStatus> {
 
         private final String mEmail;
         private final String mPassword;
+        private final CUser.Status mStatus;
 
-        UserRegisterTask(String email, String password) {
+        UserRegisterTask(String email, String password, CUser.Status status) {
             mEmail = email;
             mPassword = password;
+            mStatus = status;
         }
 
+
         @Override
-        protected Boolean doInBackground(Void... params) {
+        protected HttpStatus doInBackground(Void... params) {
             // TODO: attempt authentication against a network service.
+            CAthleteDAO athleteDAO = new CAthleteDAO();
+            CCoachDAO coachDAO = new CCoachDAO();
+            HttpStatus status = null;
+            //if(mStatus == CUser.Status.ATHLETE)
+                status = athleteDAO.create(new CAthlete(mEmail,mPassword,mStatus));
 
-            try {
-                // Simulate network access.
-                Thread.sleep(2000);
-            } catch (InterruptedException e) {
-                return false;
-            }
+            //else if (mStatus == CUser.Status.COACH);
 
 
-            return true;
+
+            return status;
         }
 
         @Override
-        protected void onPostExecute(final Boolean success) {
+        protected void onPostExecute(final HttpStatus success) {
             mAuthTask = null;
             showProgress(false);
 
-            if (success) {
+            if(success.value() == 201) {
                 finish();
                 mIntent = new Intent(CRegisterActivity.this, CHomeActivity.class);
-                mIntent.putExtra("user", new CUser(mEmail,mPassword,mStatus));
+                CUtils.setSharedPreferences(CRegisterActivity.this, new CUser(mEmail, mPassword, mStatus));
                 startActivity(mIntent);
-            } else {
-                /*TODO email déjà existant après appel réseau */
-                mEmailView.setError(getString(R.string.error_incorrect_email));
-                mEmailView.requestFocus();
+            }else if (success.value() == 302){
+                    mEmailView.setError(getString(R.string.error_incorrect_email));
+                    mEmailView.requestFocus();
+                Log.d("CRegisterActivity", "status: "+ success.value());
+            }else{
+                Toast.makeText(getApplicationContext(),"Erreur: "+success.value(), Toast.LENGTH_LONG);
             }
-
-
         }
 
         @Override
@@ -232,6 +232,14 @@ public class CRegisterActivity extends AppCompatActivity {
         }
     }
 
+    public CUser.Status getStatus(int pId){
+        CUser.Status status = null;
+
+        if(pId == R.id.athlete_radiobutton) status = CUser.Status.ATHLETE;
+        else if (pId == R.id.coach_radiobutton) status = CUser.Status.COACH;
+
+        return status;
+    }
 
 
 }

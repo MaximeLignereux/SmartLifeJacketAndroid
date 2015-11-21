@@ -2,12 +2,13 @@ package android.mlignereux.univcorse.fr.smartlifejacketandroid.activity;
 
 import android.content.Intent;
 import android.mlignereux.univcorse.fr.smartlifejacketandroid.R;
+import android.mlignereux.univcorse.fr.smartlifejacketandroid.entity.CUser;
 import android.mlignereux.univcorse.fr.smartlifejacketandroid.fragment.CHomeFragment;
 import android.mlignereux.univcorse.fr.smartlifejacketandroid.fragment.CProfilFragment;
 import android.mlignereux.univcorse.fr.smartlifejacketandroid.fragment.CSettingsFragment;
 import android.mlignereux.univcorse.fr.smartlifejacketandroid.fragment.CStatFragment;
 import android.mlignereux.univcorse.fr.smartlifejacketandroid.fragment.CTrainingFragment;
-import android.mlignereux.univcorse.fr.smartlifejacketandroid.model.CUser;
+import android.mlignereux.univcorse.fr.smartlifejacketandroid.util.CUtils;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
@@ -18,7 +19,6 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 
@@ -27,6 +27,7 @@ public class CHomeActivity extends AppCompatActivity
 
     private CUser mUser;
     private FragmentManager mFragmentManager;
+    FloatingActionButton fab;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -35,14 +36,15 @@ public class CHomeActivity extends AppCompatActivity
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
-                fab.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
-                        Intent intent = new Intent(CHomeActivity.this, CNewTrainingActivity.class);
-                        startActivity(intent);
-                    }
-                });
+         fab = (FloatingActionButton) findViewById(R.id.fab);
+            fab.setOnClickListener(new View.OnClickListener() {
+                @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(CHomeActivity.this, CNewTrainingActivity.class);
+                startActivity(intent);
+            }
+        });
+        fab.hide();
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
@@ -62,6 +64,9 @@ public class CHomeActivity extends AppCompatActivity
             e.printStackTrace();
         }
         mFragmentManager.beginTransaction().replace(R.id.container,fragment ).commit();
+
+        mUser = CUtils.getSharedPreferenceUser(CHomeActivity.this);
+
     }
 
     @Override
@@ -74,13 +79,6 @@ public class CHomeActivity extends AppCompatActivity
         }
     }
 
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.chome, menu);
-        return true;
-    }
-
     @SuppressWarnings("StatementWithEmptyBody")
     @Override
     public boolean onNavigationItemSelected(MenuItem item) {
@@ -90,13 +88,14 @@ public class CHomeActivity extends AppCompatActivity
         Fragment fragment = null;
 
         Class fragmentClass;
-
+        fab.hide();
         switch (id){
             case R.id.nav_home:
                 fragmentClass = CHomeFragment.class;
                 break;
             case R.id.nav_training:
                 fragmentClass = CTrainingFragment.class;
+                fab.show();
                 break;
             case R.id.nav_stat:
                 fragmentClass = CStatFragment.class;

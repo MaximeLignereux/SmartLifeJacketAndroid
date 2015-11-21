@@ -26,13 +26,11 @@
         completions."
     </string>
 
-    <string-array name="drawer_titles">
-        <item>Accueil</item>
-        <item>Entrainement</item>
-        <item>Historique</item>
-        <item>Statistiques</item>
-        <item>Paramètres</item>
-    </string-array>
+    <string name="user_name"></string>
+    <string name="user_pseudo"></string>
+    <string name="user_password"></string>
+    <string name="user_status"></string>
+
 
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>

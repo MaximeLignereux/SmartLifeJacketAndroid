@@ -63,6 +63,27 @@
 
             </android.support.design.widget.TextInputLayout>
 
+            <RadioGroup
+                android:id="@+id/status_radiogroup_auth"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:gravity="center">
+
+                <android.support.v7.widget.AppCompatRadioButton
+                    android:id="@+id/athlete_radiobutton_auth"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="ATHLETE"
+                    android:checked="true"/>
+
+                <android.support.v7.widget.AppCompatRadioButton
+                    android:id="@+id/coach_radiobutton_auth"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="COACH" />
+            </RadioGroup>
+
             <Button
                 android:id="@+id/email_sign_in_button"
                 style="?android:textAppearanceSmall"

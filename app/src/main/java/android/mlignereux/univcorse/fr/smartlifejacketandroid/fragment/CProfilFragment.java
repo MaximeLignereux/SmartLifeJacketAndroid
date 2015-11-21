@@ -1,6 +1,8 @@
 package android.mlignereux.univcorse.fr.smartlifejacketandroid.fragment;
 
 import android.mlignereux.univcorse.fr.smartlifejacketandroid.R;
+import android.mlignereux.univcorse.fr.smartlifejacketandroid.entity.CUser;
+import android.mlignereux.univcorse.fr.smartlifejacketandroid.util.CUtils;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -27,6 +29,8 @@ public class CProfilFragment extends Fragment {
     private String mParam2;
 
     private OnFragmentInteractionListener mListener;
+
+    private CUser mUser;
 
     public CProfilFragment() {
         // Required empty public constructor
@@ -57,6 +61,8 @@ public class CProfilFragment extends Fragment {
             mParam1 = getArguments().getString(ARG_PARAM1);
             mParam2 = getArguments().getString(ARG_PARAM2);
         }
+
+        mUser = CUtils.getSharedPreferenceUser(getActivity());
     }
 
     @Override

@@ -1,9 +1,9 @@
 package android.mlignereux.univcorse.fr.smartlifejacketandroid.fragment;
 
+import android.app.Fragment;
 import android.mlignereux.univcorse.fr.smartlifejacketandroid.R;
-import android.mlignereux.univcorse.fr.smartlifejacketandroid.fragment.dummy.CStatContent;
+import android.mlignereux.univcorse.fr.smartlifejacketandroid.fragment.dummy.CCurrentTrainingContent;
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -22,7 +22,7 @@ import android.widget.TextView;
  * Activities containing this fragment MUST implement the {@link OnFragmentInteractionListener}
  * interface.
  */
-public class CStatFragment extends Fragment implements AbsListView.OnItemClickListener {
+public class CCurrentTrainingFragment extends Fragment implements AbsListView.OnItemClickListener {
 
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -50,12 +50,12 @@ public class CStatFragment extends Fragment implements AbsListView.OnItemClickLi
      * Mandatory empty constructor for the fragment manager to instantiate the
      * fragment (e.g. upon screen orientation changes).
      */
-    public CStatFragment() {
+    public CCurrentTrainingFragment() {
     }
 
     // TODO: Rename and change types of parameters
-    public static CStatFragment newInstance(String param1, String param2) {
-        CStatFragment fragment = new CStatFragment();
+    public static CCurrentTrainingFragment newInstance(String param1, String param2) {
+        CCurrentTrainingFragment fragment = new CCurrentTrainingFragment();
         Bundle args = new Bundle();
         args.putString(ARG_PARAM1, param1);
         args.putString(ARG_PARAM2, param2);
@@ -73,14 +73,14 @@ public class CStatFragment extends Fragment implements AbsListView.OnItemClickLi
         }
 
         // TODO: Change Adapter to display your content
-        mAdapter = new ArrayAdapter<CStatContent.DummyItem>(getActivity(),
-                android.R.layout.simple_list_item_1, android.R.id.text1, CStatContent.ITEMS);
+        mAdapter = new ArrayAdapter<CCurrentTrainingContent.DummyItem>(getActivity(),
+                android.R.layout.simple_list_item_1, android.R.id.text1, CCurrentTrainingContent.ITEMS);
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_item, container, false);
+        View view = inflater.inflate(R.layout.fragment_current_training, container, false);
 
         // Set the adapter
         mListView = (AbsListView) view.findViewById(android.R.id.list);
@@ -91,6 +91,7 @@ public class CStatFragment extends Fragment implements AbsListView.OnItemClickLi
 
         return view;
     }
+
 
     @Override
     public void onDetach() {
@@ -103,7 +104,7 @@ public class CStatFragment extends Fragment implements AbsListView.OnItemClickLi
         if (null != mListener) {
             // Notify the active callbacks interface (the activity, if the
             // fragment is attached to one) that an item has been selected.
-            mListener.onFragmentInteraction(CStatContent.ITEMS.get(position).id);
+            mListener.onFragmentInteraction(CCurrentTrainingContent.ITEMS.get(position).id);
         }
     }
 

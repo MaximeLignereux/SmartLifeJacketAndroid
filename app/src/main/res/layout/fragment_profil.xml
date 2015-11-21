@@ -4,10 +4,29 @@
     android:layout_height="match_parent"
     tools:context="android.mlignereux.univcorse.fr.smartlifejacketandroid.fragment.CProfilFragment">
 
-    <!-- TODO: Update blank fragment layout -->
-    <TextView
+
+    <GridLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:text="Hello profil fragment" />
+        android:layout_gravity="center"
+        android:rowCount="3"
+        android:columnCount="3">
 
+
+        <EditText
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:inputType="textPersonName"
+            android:text="Name"
+            android:ems="10"
+            android:id="@+id/editText"
+            android:layout_row="1"
+            android:layout_column="2" />
+    </GridLayout>
+
+    <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/imageView2"
+        android:layout_gravity="top" />
 </FrameLayout>

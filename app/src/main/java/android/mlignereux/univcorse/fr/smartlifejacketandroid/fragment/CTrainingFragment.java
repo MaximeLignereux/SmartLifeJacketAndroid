@@ -1,8 +1,11 @@
 package android.mlignereux.univcorse.fr.smartlifejacketandroid.fragment;
 
+import android.content.Intent;
 import android.mlignereux.univcorse.fr.smartlifejacketandroid.R;
+import android.mlignereux.univcorse.fr.smartlifejacketandroid.activity.CNewTrainingActivity;
 import android.net.Uri;
 import android.os.Bundle;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -58,6 +61,15 @@ public class CTrainingFragment extends Fragment {
             mParam1 = getArguments().getString(ARG_PARAM1);
             mParam2 = getArguments().getString(ARG_PARAM2);
         }
+
+        FloatingActionButton fab = (FloatingActionButton)getActivity().findViewById(R.id.fab);
+        fab.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(getContext(), CNewTrainingActivity.class);
+                startActivity(intent);
+            }
+        });
     }
 
     @Override
