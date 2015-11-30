@@ -1,6 +1,5 @@
 package android.mlignereux.univcorse.fr.smartlifejacketandroid.activity;
 
-import android.content.Intent;
 import android.mlignereux.univcorse.fr.smartlifejacketandroid.R;
 import android.mlignereux.univcorse.fr.smartlifejacketandroid.entity.CUser;
 import android.mlignereux.univcorse.fr.smartlifejacketandroid.fragment.CHomeFragment;
@@ -20,7 +19,6 @@ import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
-import android.view.View;
 
 public class CHomeActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
@@ -36,14 +34,7 @@ public class CHomeActivity extends AppCompatActivity
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-         fab = (FloatingActionButton) findViewById(R.id.fab);
-            fab.setOnClickListener(new View.OnClickListener() {
-                @Override
-            public void onClick(View view) {
-                Intent intent = new Intent(CHomeActivity.this, CNewTrainingActivity.class);
-                startActivity(intent);
-            }
-        });
+        fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.hide();
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
@@ -66,6 +57,11 @@ public class CHomeActivity extends AppCompatActivity
         mFragmentManager.beginTransaction().replace(R.id.container,fragment ).commit();
 
         mUser = CUtils.getSharedPreferenceUser(CHomeActivity.this);
+        if (mUser.getStatus().equals(CUser.Status.ATHLETE))
+            mUser=CUtils.getSharedPreferenceAthlete(CHomeActivity.this);
+        else{
+            mUser=CUtils.getSharedPreferenceCoach(CHomeActivity.this);
+        }
 
     }
 

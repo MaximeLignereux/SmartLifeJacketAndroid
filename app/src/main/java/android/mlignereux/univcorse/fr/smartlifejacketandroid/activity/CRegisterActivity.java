@@ -8,6 +8,8 @@ import android.mlignereux.univcorse.fr.smartlifejacketandroid.R;
 import android.mlignereux.univcorse.fr.smartlifejacketandroid.dao.CAthleteDAO;
 import android.mlignereux.univcorse.fr.smartlifejacketandroid.dao.CCoachDAO;
 import android.mlignereux.univcorse.fr.smartlifejacketandroid.entity.CAthlete;
+import android.mlignereux.univcorse.fr.smartlifejacketandroid.entity.CCoach;
+import android.mlignereux.univcorse.fr.smartlifejacketandroid.entity.CRequeteValue;
 import android.mlignereux.univcorse.fr.smartlifejacketandroid.entity.CUser;
 import android.mlignereux.univcorse.fr.smartlifejacketandroid.util.CUtils;
 import android.os.AsyncTask;
@@ -182,6 +184,9 @@ public class CRegisterActivity extends AppCompatActivity {
         private final String mEmail;
         private final String mPassword;
         private final CUser.Status mStatus;
+        private CRequeteValue requeteValue;
+
+        private CUser user;
 
         UserRegisterTask(String email, String password, CUser.Status status) {
             mEmail = email;
@@ -196,12 +201,19 @@ public class CRegisterActivity extends AppCompatActivity {
             CAthleteDAO athleteDAO = new CAthleteDAO();
             CCoachDAO coachDAO = new CCoachDAO();
             HttpStatus status = null;
-            //if(mStatus == CUser.Status.ATHLETE)
-                status = athleteDAO.create(new CAthlete(mEmail,mPassword,mStatus));
 
-            //else if (mStatus == CUser.Status.COACH);
-
-
+            if(mStatus == CUser.Status.ATHLETE) {
+                user = new CAthlete(mEmail, mPassword, mStatus);
+                requeteValue = athleteDAO.create((CAthlete) user);
+                status = requeteValue.getStatus();
+                user = requeteValue.getUser();
+            }
+            else if (mStatus == CUser.Status.COACH) {
+                user = new CCoach(mEmail, mPassword, mStatus);
+                requeteValue = coachDAO.create((CCoach) user);
+                status = requeteValue.getStatus();
+                user = requeteValue.getUser();
+            }
 
             return status;
         }
@@ -214,7 +226,11 @@ public class CRegisterActivity extends AppCompatActivity {
             if(success.value() == 201) {
                 finish();
                 mIntent = new Intent(CRegisterActivity.this, CHomeActivity.class);
-                CUtils.setSharedPreferences(CRegisterActivity.this, new CUser(mEmail, mPassword, mStatus));
+                if (user.getStatus().equals(CUser.Status.ATHLETE))
+                    CUtils.setSharedPreferencesAthlete(CRegisterActivity.this, (CAthlete)user);
+                else{
+                    CUtils.setSharedPreferencesCoach(CRegisterActivity.this, (CCoach) user);
+                }
                 startActivity(mIntent);
             }else if (success.value() == 302){
                     mEmailView.setError(getString(R.string.error_incorrect_email));

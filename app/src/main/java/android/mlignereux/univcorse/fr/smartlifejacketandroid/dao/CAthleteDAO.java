@@ -1,6 +1,8 @@
 package android.mlignereux.univcorse.fr.smartlifejacketandroid.dao;
 
 import android.mlignereux.univcorse.fr.smartlifejacketandroid.entity.CAthlete;
+import android.mlignereux.univcorse.fr.smartlifejacketandroid.entity.CRequeteValue;
+import android.mlignereux.univcorse.fr.smartlifejacketandroid.entity.CUser;
 import android.mlignereux.univcorse.fr.smartlifejacketandroid.util.CConstant;
 import android.util.Log;
 
@@ -28,7 +30,7 @@ public class CAthleteDAO {
     RestTemplate restTemplate = new RestTemplate();
     HttpHeaders requestHeaders = new HttpHeaders();
 
-    public HttpStatus create(CAthlete pAthlete) {
+    public CRequeteValue create(CAthlete pAthlete) {
 
         String url = URL + "add";
         ResponseEntity responseEntity = null;
@@ -60,10 +62,10 @@ public class CAthleteDAO {
                 e.printStackTrace();
             }
         }
-        return status;
+        return getResultRequete(status,pAthlete);
     }
 
-    public HttpStatus getAthlete(CAthlete pAthlete){
+    public CRequeteValue getAthlete(CAthlete pAthlete){
         HttpStatus status = null;
         String url = URL + "connect";
         ResponseEntity responseEntity = null;
@@ -102,6 +104,10 @@ public class CAthleteDAO {
             }
         }
 
-        return status;
+        return getResultRequete(status,pAthlete);
+    }
+
+    public static CRequeteValue getResultRequete(HttpStatus httpStatus, CUser user){
+        return new CRequeteValue(httpStatus,user);
     }
 }

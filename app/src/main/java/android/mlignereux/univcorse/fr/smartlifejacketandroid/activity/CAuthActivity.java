@@ -13,7 +13,10 @@ import android.mlignereux.univcorse.fr.smartlifejacketandroid.R;
 import android.mlignereux.univcorse.fr.smartlifejacketandroid.dao.CAthleteDAO;
 import android.mlignereux.univcorse.fr.smartlifejacketandroid.dao.CCoachDAO;
 import android.mlignereux.univcorse.fr.smartlifejacketandroid.entity.CAthlete;
+import android.mlignereux.univcorse.fr.smartlifejacketandroid.entity.CCoach;
+import android.mlignereux.univcorse.fr.smartlifejacketandroid.entity.CRequeteValue;
 import android.mlignereux.univcorse.fr.smartlifejacketandroid.entity.CUser;
+import android.mlignereux.univcorse.fr.smartlifejacketandroid.util.CUtils;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Build;
@@ -321,6 +324,8 @@ public class CAuthActivity extends AppCompatActivity implements LoaderCallbacks<
         private final String mEmail;
         private final String mPassword;
         private final CUser.Status mStatus;
+        private CUser user;
+        private CRequeteValue requeteValue;
 
         UserLoginTask(String email, String password, CUser.Status status) {
             mEmail = email;
@@ -331,11 +336,23 @@ public class CAuthActivity extends AppCompatActivity implements LoaderCallbacks<
         @Override
         protected HttpStatus doInBackground(Void... params) {
 
-            HttpStatus status;
             CAthleteDAO athleteDAO = new CAthleteDAO();
             CCoachDAO coachDAO = new CCoachDAO();
+            HttpStatus status = null;
 
-            status = athleteDAO.getAthlete(new CAthlete(mEmail,mPassword,mStatus));
+            if(mStatus == CUser.Status.ATHLETE) {
+                user = new CAthlete(mEmail, mPassword, mStatus);
+                requeteValue = athleteDAO.getAthlete((CAthlete) user);
+                status = requeteValue.getStatus();
+                user = requeteValue.getUser();
+            }
+            else if (mStatus == CUser.Status.COACH) {
+                user = new CCoach(mEmail, mPassword, mStatus);
+                requeteValue = coachDAO.getCoach((CCoach) user);
+                status = requeteValue.getStatus();
+                user = requeteValue.getUser();
+            }
+
 
             return status;
         }
@@ -348,6 +365,12 @@ public class CAuthActivity extends AppCompatActivity implements LoaderCallbacks<
             if (success.value() == 200) {
                 finish();
                 mIntent = new Intent(CAuthActivity.this, CHomeActivity.class);
+                System.out.println("User: " + user);
+                if (user.getStatus().equals(CUser.Status.ATHLETE))
+                    CUtils.setSharedPreferencesAthlete(CAuthActivity.this, (CAthlete)user);
+                else{
+                    CUtils.setSharedPreferencesCoach(CAuthActivity.this, (CCoach) user);
+                }
                 startActivity(mIntent);
             } else {
                 mPasswordView.setError(getString(R.string.error_incorrect_password));
@@ -372,5 +395,7 @@ public class CAuthActivity extends AppCompatActivity implements LoaderCallbacks<
 
         return status;
     }
+
+
 }
 

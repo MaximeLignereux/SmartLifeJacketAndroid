@@ -3,6 +3,10 @@ package android.mlignereux.univcorse.fr.smartlifejacketandroid.fragment;
 import android.content.Intent;
 import android.mlignereux.univcorse.fr.smartlifejacketandroid.R;
 import android.mlignereux.univcorse.fr.smartlifejacketandroid.activity.CNewTrainingActivity;
+import android.mlignereux.univcorse.fr.smartlifejacketandroid.entity.CAthlete;
+import android.mlignereux.univcorse.fr.smartlifejacketandroid.entity.CCoach;
+import android.mlignereux.univcorse.fr.smartlifejacketandroid.entity.CUser;
+import android.mlignereux.univcorse.fr.smartlifejacketandroid.util.CUtils;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
@@ -31,6 +35,8 @@ public class CTrainingFragment extends Fragment {
     private String mParam2;
 
     private OnFragmentInteractionListener mListener;
+
+    private CUser mUser;
 
     public CTrainingFragment() {
         // Required empty public constructor
@@ -62,14 +68,30 @@ public class CTrainingFragment extends Fragment {
             mParam2 = getArguments().getString(ARG_PARAM2);
         }
 
+        mUser = CUtils.getSharedPreferenceUser(getActivity());
+        if (mUser.getStatus().equals(CUser.Status.ATHLETE))
+            mUser=CUtils.getSharedPreferenceAthlete(getActivity());
+        else{
+            mUser=CUtils.getSharedPreferenceCoach(getActivity());
+        }
         FloatingActionButton fab = (FloatingActionButton)getActivity().findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent intent = new Intent(getContext(), CNewTrainingActivity.class);
-                startActivity(intent);
-            }
-        });
+        if(mUser.getStatus().equals(CUser.Status.COACH)){
+
+            fab.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    Intent intent = new Intent(getContext(), CNewTrainingActivity.class);
+                    if (mUser.getStatus().equals(CUser.Status.ATHLETE))
+                        CUtils.setSharedPreferencesAthlete(getActivity(), (CAthlete)mUser);
+                    else{
+                        CUtils.setSharedPreferencesCoach(getActivity(), (CCoach) mUser);
+                    }
+                    startActivity(intent);
+                }
+            });
+        }else fab.hide();
+
+
     }
 
     @Override
